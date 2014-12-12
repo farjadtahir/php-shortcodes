@@ -1,6 +1,6 @@
 <?php
 /**
- * WordPress API for creating bbcode like tags or what WordPress calls
+ * PHP-Shortcode is for creating bbcode like tags or what WordPress calls
  * "shortcodes." The tag and attribute parsing or regular expression code is
  * based on the Textpattern tag parser.
  *
@@ -25,17 +25,12 @@
  * $out = do_shortcode($content);
  * </code>
  *
- * @link http://codex.wordpress.org/Shortcode_API
- *
- * @package WordPress
- * @subpackage Shortcodes
- * @since 2.5
  */
 
 /**
  * Container for storing shortcode tags and their hook to call for the shortcode
  *
- * @since 2.5
+ * @since 1.0
  * @name $shortcode_tags
  * @var array
  * @global array $shortcode_tags
@@ -84,7 +79,7 @@ $shortcode_tags = array();
  * add_shortcode('baztag', 'baztag_func');
  * </code>
  *
- * @since 2.5
+ * @since 1.0
  * @uses $shortcode_tags
  *
  * @param string $tag Shortcode tag to be searched in post content.
@@ -100,7 +95,7 @@ function add_shortcode($tag, $func) {
 /**
  * Removes hook for shortcode.
  *
- * @since 2.5
+ * @since 1.0
  * @uses $shortcode_tags
  *
  * @param string $tag shortcode tag to remove hook for.
@@ -118,7 +113,7 @@ function remove_shortcode($tag) {
  * shortcodes global by a empty array. This is actually a very efficient method
  * for removing all shortcodes.
  *
- * @since 2.5
+ * @since 1.0
  * @uses $shortcode_tags
  */
 function remove_all_shortcodes() {
@@ -134,7 +129,7 @@ function remove_all_shortcodes() {
  * without any filtering. This might cause issues when plugins are disabled but
  * the shortcode will still show up in the post or content.
  *
- * @since 2.5
+ * @since 1.0
  * @uses $shortcode_tags
  * @uses get_shortcode_regex() Gets the search pattern for searching shortcodes.
  *
@@ -165,7 +160,7 @@ function do_shortcode($content) {
  * 4 - The self closing /
  * 5 - The content of a shortcode when it wraps some content.
  *
- * @since 2.5
+ * @since 1.0
  * @uses $shortcode_tags
  *
  * @return string The shortcode search regular expression
@@ -183,7 +178,7 @@ function get_shortcode_regex() {
  * Regular Expression callable for do_shortcode() for calling shortcode hook.
  * @see get_shortcode_regex for details of the match array contents.
  *
- * @since 2.5
+ * @since 1.0
  * @access private
  * @uses $shortcode_tags
  *
@@ -217,7 +212,7 @@ function do_shortcode_tag( $m ) {
  * attribute as the value in the key/value pair. This allows for easier
  * retrieval of the attributes, since all attributes have to be known.
  *
- * @since 2.5
+ * @since 1.0
  *
  * @param string $text
  * @return array List of attributes and their value.
@@ -255,7 +250,7 @@ function shortcode_parse_atts($text) {
  * If the $atts list has unsupported attributes, then they will be ignored and
  * removed from the final returned list.
  *
- * @since 2.5
+ * @since 1.0
  *
  * @param array $pairs Entire list of supported attributes and their defaults.
  * @param array $atts User defined attributes in shortcode tag.
@@ -276,7 +271,7 @@ function shortcode_atts($pairs, $atts) {
 /**
  * Remove all shortcode tags from the given content.
  *
- * @since 2.5
+ * @since 1.0
  * @uses $shortcode_tags
  *
  * @param string $content Content to remove shortcode tags.
@@ -293,7 +288,7 @@ function strip_shortcodes( $content ) {
 	return preg_replace('/'.$pattern.'/s', '$1$6', $content);
 }
 
-function _wp_filter_build_unique_id($tag, $function, $priority) {
+function _phpshortcodes_filter_build_unique_id($tag, $function, $priority) {
 	global $wp_filter;
 	static $filter_id_count = 0;
 
@@ -334,12 +329,12 @@ function _wp_filter_build_unique_id($tag, $function, $priority) {
 function add_filter($tag, $function_to_add, $priority = 10, $accepted_args = 1) {
 	global $wp_filter, $merged_filters;
 
-	$idx = _wp_filter_build_unique_id($tag, $function_to_add, $priority);
+	$idx = _phpshortcodes_filter_build_unique_id($tag, $function_to_add, $priority);
 	$wp_filter[$tag][$priority][$idx] = array('function' => $function_to_add, 'accepted_args' => $accepted_args);
 	unset( $merged_filters[ $tag ] );
 	return true;
 }
 
-add_filter('the_content', 'do_shortcode', 11); // AFTER wpautop()
+add_filter('the_content', 'do_shortcode', 11);
 
-//end of shortcodes.php
+//end of php-shortcode.php
